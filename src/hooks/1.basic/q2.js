@@ -1,15 +1,48 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 function Q2() {
-  const arr = [];
-  const [forceRender, setForceRender] = useState(false);
+    //2-1
+    const arr = useRef([]);
+    const [forceRender, setForceRender] = useState(false);
+    const [string, setString] = useState("");
+    const emptyRef = useRef("");
+    const listRef = useRef("");
 
-  const onAddList = () => {
-    setForceRender((prev) => !prev);
-    arr.push();
-  };
+    const onInputChange = (e) => {
+        setString(e.target.value);
+    };
 
-  /* 
+    const onAddList = () => {
+        setForceRender((prev) => !prev); // 이건 언제쓰는거지..?
+        // setForceRender(true);
+        arr.current.push(string);
+        setString("");
+    };
+    console.log(arr);
+    // console.log(forceRender);
+
+    const onSubmitList = () => {
+        if (arr.current.length !== 0) {
+            emptyRef.current.style.display = "none";
+            arr.current.map((value, index) => {
+                const li = document.createElement("li"); //dom api 쓰지 않고 해보기
+                li.innerText = index + 1 + ". " + value;
+                return listRef.current.appendChild(li);
+            });
+        }
+        // setForceRender(false);
+    };
+    console.log(arr.current.length);
+
+    //2-2
+    const colorRef = useRef(null);
+    const onChangeColor = () => {
+        const colorCode =
+            "#" + Math.round(Math.random() * 0xffffff).toString(16); // 0~0xffffff 랜덤 수 반환하여 Math.round로 소수점을 반올림해주고 toString(16)으로 16진수로 변경해준다.
+        colorRef.current.style.color = colorCode;
+    };
+
+    /* 
     문제2
 
     2-1)
@@ -41,30 +74,32 @@ function Q2() {
         따라서 useRef는 사용하여 해당 문구의 색상을 변경해보세요 :)
   */
 
-  return (
-    <>
-      <h1>문제2</h1>
-      <div>
-        <h2>문제 2-1</h2>
-        <p>
-          <input />
-        </p>
-        <p>
-          <button onClick={onAddList}>추가</button>
-        </p>
-        <p>
-          <button>제출</button>
-        </p>
-
-        <p>제출된 목록이 없습니다</p>
-        <ul>{/* -- list -- */}</ul>
-      </div>
-      <div>
-        <h2>문제 2-2</h2>
-        <p> 이 문구는 아래 버튼을 누르면 색상이 바뀝니다</p>
-        <button>변경</button>
-      </div>
-    </>
-  );
+    return (
+        <>
+            <h1>문제2</h1>
+            <div>
+                <h2>문제 2-1</h2>
+                <p>
+                    <input onChange={onInputChange} value={string} />
+                </p>
+                <p>
+                    <button onClick={onAddList}>추가</button>
+                </p>
+                <p>
+                    <button onClick={onSubmitList}>제출</button>
+                </p>
+                <p ref={emptyRef}>제출된 목록이 없습니다</p>
+                <ul ref={listRef}>{/* -- list -- */}</ul>
+            </div>
+            <div>
+                <h2>문제 2-2</h2>
+                <p ref={colorRef}>
+                    {" "}
+                    이 문구는 아래 버튼을 누르면 색상이 바뀝니다
+                </p>
+                <button onClick={onChangeColor}>변경</button>
+            </div>
+        </>
+    );
 }
 export default Q2;
