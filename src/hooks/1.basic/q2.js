@@ -1,30 +1,6 @@
 import { useState, useRef } from "react";
 
 function Q2() {
-    const arr = [];
-    const colorRef = useRef("");
-
-    const [input, setInput] = useState("");
-    const [forceRender, setForceRender] = useState(false);
-
-    const onAddList = () => {
-        setForceRender((prev) => !prev);
-        arr.push();
-    };
-    console.log(arr);
-
-    const onListSubmit = () => {};
-
-    const inputChange = (e) => {
-        setInput(e.target.value);
-    };
-
-    console.log(input);
-
-    const onChangeColor = (e) => {
-        colorRef.current.style.color = "red";
-    };
-
     /* 
     문제2
 
@@ -57,6 +33,50 @@ function Q2() {
         따라서 useRef는 사용하여 해당 문구의 색상을 변경해보세요 :)
   */
 
+    const arr = useRef([]);
+    const emptyListRef = useRef(null);
+
+    const [input, setInput] = useState("");
+    const [forceRender, setForceRender] = useState(false);
+    const [newArray, setNewArray] = useState([]);
+
+    const onAddList = () => {
+        setForceRender((prev) => !prev);
+        if (input !== "") {
+            arr.current.push(input);
+        }
+        setInput("");
+        setNewArray([]);
+    };
+    console.log(arr);
+
+    const onListSubmit = () => {
+        if (arr.current.length !== 0) {
+            emptyListRef.current.style.display = "none";
+            setNewArray(arr.current);
+        }
+    };
+
+    const inputChange = (e) => {
+        setInput(e.target.value);
+    };
+
+    console.log(input);
+
+    const input_list = newArray.map((name, index) => {
+        return (
+            <li>
+                {index + 1}. {name}
+            </li>
+        );
+    });
+    // 문제 2-2
+    const colorRef = useRef("");
+
+    const onChangeColor = (e) => {
+        colorRef.current.style.color = "red";
+    };
+
     return (
         <>
             <h1>문제2</h1>
@@ -72,8 +92,8 @@ function Q2() {
                     <button onClick={onListSubmit}>제출</button>
                 </p>
 
-                <p>제출된 목록이 없습니다</p>
-                <ul>{/* -- list -- */}</ul>
+                <p ref={emptyListRef}>제출된 목록이 없습니다</p>
+                <ul>{input_list}</ul>
             </div>
             <div>
                 <h2>문제 2-2</h2>
