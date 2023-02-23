@@ -1,7 +1,8 @@
 import Q3components from "../../components/1.basic/q3components";
+import { useState, useEffect } from "react";
 
 function Q3() {
-  /* 
+    /* 
     문제3
     useEffect useState에 관련한 문제입니다
     단체 줄넘기 대회에 출전하였습니다
@@ -21,21 +22,33 @@ function Q3() {
     해당 컴포넌트는 보이지 않아야하며, 줄넘기 횟수도 더이상 증가해서는 안됩니다.
     또한, 줄넘기 횟수는 0으로 고정되어야합니다.
   */
+    const [count, setCount] = useState(0);
+    const [isControl, isSetControl] = useState(false);
 
-  return (
-    <>
-      <h1>문제3</h1>
-      <div>
-        <p> 줄넘기 횟수 : 0 </p>
-        <Q3components />
-        <p>
-          <button>줄넘기 시작</button>
-        </p>
-        <p>
-          <button>줄넘기 중지</button>
-        </p>
-      </div>
-    </>
-  );
+    const onStart = () => {
+        isSetControl(true);
+    };
+
+    const onStop = () => {
+        isSetControl(false);
+    };
+
+    return (
+        <>
+            <h1>문제3</h1>
+            <div>
+                <p> 줄넘기 횟수 : {count} </p>
+                {isControl && <Q3components setCount={setCount} />}
+                <p>
+                    {!isControl && (
+                        <button onClick={onStart}>줄넘기 시작</button>
+                    )}
+                </p>
+                <p>
+                    {isControl && <button onClick={onStop}>줄넘기 중지</button>}
+                </p>
+            </div>
+        </>
+    );
 }
 export default Q3;
