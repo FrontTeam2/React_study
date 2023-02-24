@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PlayListMock from "../../__mock__/playList.json";
 
 function State1() {
@@ -16,7 +16,14 @@ function State1() {
     /* 데이터 콘솔에 찍어두었으니 확인해볼 것 */
     const [titleInput, setTitleInput] = useState("");
     const [singerInput, setSingerInput] = useState("");
-    // const [addList,setAddList] = useState([]);
+    const [addList, setAddList] = useState([]);
+    const listRef = useRef([]);
+
+    useEffect(() => {
+        setAddList(() => {
+            return [...PlayListMock.playlist];
+        });
+    }, []);
 
     const onChangeTitleInput = (e) => {
         setTitleInput(e.target.value);
@@ -24,17 +31,35 @@ function State1() {
     const onChangeSingerInput = (e) => {
         setSingerInput(e.target.value);
     };
-    console.log(titleInput);
-    console.log(singerInput);
 
     const onAddList = () => {
+        console.log(listRef);
+        // 중복 플레이리스트가 존재하면 alert로 막기
+        // PlayListMock.playlist.map((item) => {
+        //     if (item.signer === singerInput && item.title === titleInput) {
+        //          alert("중복된 플레이리스트가 존재합니다");
+        //     }
+        // });
         PlayListMock.playlist.push({
             title: titleInput,
             signer: singerInput,
         });
-        console.log(PlayListMock.playlist);
+        setAddList(() => {
+            return [...PlayListMock.playlist];
+        });
+        setTitleInput("");
+        setSingerInput("");
     };
-    const onDeleteList = () => {};
+
+    const onDeleteList = (index) => {
+        // console.log(e.target.parentElement);
+        console.log(index);
+        PlayListMock.playlist.splice(index, 1);
+        setAddList(() => {
+            return [...PlayListMock.playlist];
+        });
+    };
+    console.log(addList);
 
     return (
         <>
@@ -47,22 +72,29 @@ function State1() {
                     <p>Joe Hisaishi</p>
                 </li> */}
 
-                {PlayListMock.playlist.map((item) => {
+                {addList.map((item, index) => {
                     return (
-                        <li key={item.signer}>
+                        <li
+                            key={[item.title, item.signer]}
+                            ref={listRef.current[index]}
+                        >
                             <h3>{item.title}</h3>
-                            <p>{item.singer}</p>
-                            <button onClick={onDeleteList}>삭제</button>
+                            <p>{item.signer}</p>
+                            <button onClick={() => onDeleteList(index)}>
+                                삭제
+                            </button>
                         </li>
                     );
                 })}
             </ul>
             <div>
                 <p>
-                    곡명 : <input onChange={onChangeTitleInput} />
+                    곡명 :{" "}
+                    <input onChange={onChangeTitleInput} value={titleInput} />
                 </p>
                 <p>
-                    가수/작곡 : <input onChange={onChangeSingerInput} />
+                    가수/작곡 :{" "}
+                    <input onChange={onChangeSingerInput} value={singerInput} />
                 </p>
                 <p>
                     <button onClick={onAddList}>추가</button>
