@@ -1,5 +1,5 @@
 import PlayListMock from "../../__mock__/playList.json";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 function State1() {
@@ -15,8 +15,10 @@ function State1() {
     const [titleInput, setTitleInput] = useState();
     const [songInput, setSongInput] = useState();
     const [inputList, setInputList] = useState([]);
+    const [isDelete, isSetDelete] = useState(false);
 
     console.log(PlayListMock.playlist);
+
     /* 데이터 콘솔에 찍어두었으니 확인해볼 것 */
 
     const titleListInput = (e) => {
@@ -26,6 +28,8 @@ function State1() {
         setSongInput(e.target.value);
     };
 
+    console.log(PlayListMock.playlist);
+
     const onAddList = () => {
         PlayListMock.playlist.push({
             title: titleInput,
@@ -34,21 +38,25 @@ function State1() {
         setTitleInput("");
         setSongInput("");
         setInputList(PlayListMock.playlist);
+        // inputList에 배열객체에 고유한 키값인 id를 부여해줘야한다.
     };
 
-    const onDeleteList = () => {
-        inputList.filter(() => {});
+    const onDeleteList = (index) => {
+        inputList.splice(index, 1);
+        console.log(inputList);
+    };
+
+    const onAllDeleteList = () => {
+        PlayListMock.playlist = [];
+        setInputList([]);
     };
 
     const input_list = inputList.map((prev, index) => {
         return (
-            <li key={index}>
-                <h3>
-                    {index + 1}. {prev.title}
-                </h3>
-                <p>
-                    {index + 1}. {prev.signer}
-                </p>
+            <li key={(prev.title, prev.signer)}>
+                <h3>{prev.title}</h3>
+                <p>{prev.signer}</p>
+                <button onClick={() => onDeleteList(index)}>삭제</button>
             </li>
         );
     });
@@ -56,26 +64,19 @@ function State1() {
     return (
         <>
             <h1>문제1</h1>
-            <ul>
-                {/* list */}
-                {/* 예시 데이터입니다 */}
-                {input_list}
-
-                {/* <li>
-                    <h3>Summer</h3>
-                    <p>Joe Hisaishi</p>
-                </li> */}
-            </ul>
+            <ul>{input_list}</ul>
             <div>
                 <p>
-                    곡명 : <input onChange={titleListInput} />
+                    곡명 :
+                    <input value={titleInput} onChange={titleListInput} />
                 </p>
                 <p>
-                    가수/작곡 : <input onChange={songListInput} />
+                    가수/작곡 :
+                    <input value={songInput} onChange={songListInput} />
                 </p>
                 <S.Button>
                     <button onClick={onAddList}>추가</button>
-                    <button onClick={onDeleteList}>삭제</button>
+                    <button onClick={onAllDeleteList}>삭제</button>
                 </S.Button>
             </div>
         </>
