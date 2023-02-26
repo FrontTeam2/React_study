@@ -38,11 +38,12 @@ function State1() {
         setTitleInput("");
         setSongInput("");
         setInputList(PlayListMock.playlist);
-        // inputList에 배열객체에 고유한 키값인 id를 부여해줘야한다.
+        // inputList에 배열객체에 고유한 키값인 id를 부여해주고 싶은데...
     };
 
     const onDeleteList = (index) => {
-        inputList.splice(index, 1);
+        setInputList(PlayListMock.playlist.splice(index, 1));
+        // 배열에 각 인자가 삭제가 되는데 화면에 뿌려지는 표현이... 이상
         console.log(inputList);
     };
 
@@ -51,11 +52,13 @@ function State1() {
         setInputList([]);
     };
 
-    const input_list = inputList.map((prev, index) => {
+    const input_list = inputList.map((arg, index) => {
         return (
-            <li key={(prev.title, prev.signer)}>
-                <h3>{prev.title}</h3>
-                <p>{prev.signer}</p>
+            <li key={(arg.title, arg.signer)}>
+                <h3>
+                    {index + 1}. {arg.title}
+                </h3>
+                <p>{arg.signer}</p>
                 <button onClick={() => onDeleteList(index)}>삭제</button>
             </li>
         );
