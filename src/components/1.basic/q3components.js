@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 
 function Q3components({ setCount }) {
     const controlCount = useRef(null);
+    console.log(controlCount);
 
     useEffect((prev) => {
         controlCount.current = setInterval(() => {
