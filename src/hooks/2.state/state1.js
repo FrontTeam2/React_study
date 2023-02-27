@@ -16,13 +16,11 @@ function State1() {
     /* 데이터 콘솔에 찍어두었으니 확인해볼 것 */
     const [titleInput, setTitleInput] = useState("");
     const [singerInput, setSingerInput] = useState("");
-    const [addList, setAddList] = useState([]);
-    const listRef = useRef([]);
+    const [addList, setAddList] = useState([...PlayListMock.playlist]);
+    const [finalList, setFinalList] = useState([]);
 
     useEffect(() => {
-        setAddList(() => {
-            return [...PlayListMock.playlist];
-        });
+        setFinalList([...addList]);
     }, []);
 
     const onChangeTitleInput = (e) => {
@@ -33,20 +31,31 @@ function State1() {
     };
 
     const onAddList = () => {
-        console.log(listRef);
         // 중복 플레이리스트가 존재하면 alert로 막기
-        // PlayListMock.playlist.map((item) => {
-        //     if (item.signer === singerInput && item.title === titleInput) {
-        //          alert("중복된 플레이리스트가 존재합니다");
-        //     }
-        // });
-        PlayListMock.playlist.push({
-            title: titleInput,
-            signer: singerInput,
-        });
-        setAddList(() => {
-            return [...PlayListMock.playlist];
-        });
+        for (let i = 0; i < addList.length; i++) {
+            if (
+                addList[i].title === titleInput &&
+                addList[i].signer === singerInput
+            ) {
+                alert("중복된 리스트가 존재합니다.");
+                setTitleInput("");
+                setSingerInput("");
+                return;
+            }
+        }
+        if (titleInput === "" && singerInput === "") {
+            alert("가수와 곡명을 적어주세요");
+        } else if (titleInput === "") {
+            alert("곡명을 적어주세요");
+        } else if (singerInput === "") {
+            alert("가수를 적어주세요");
+        } else {
+            addList.push({
+                title: titleInput,
+                signer: singerInput,
+            });
+        }
+        setFinalList([...addList]);
         setTitleInput("");
         setSingerInput("");
     };
@@ -54,12 +63,11 @@ function State1() {
     const onDeleteList = (index) => {
         // console.log(e.target.parentElement);
         console.log(index);
-        PlayListMock.playlist.splice(index, 1);
-        setAddList(() => {
-            return [...PlayListMock.playlist];
-        });
+        console.log(addList.splice(index, 1));
+        console.log(addList);
+        setFinalList([...addList]);
     };
-    console.log(addList);
+    console.log(finalList);
 
     return (
         <>
@@ -72,12 +80,9 @@ function State1() {
                     <p>Joe Hisaishi</p>
                 </li> */}
 
-                {addList.map((item, index) => {
+                {finalList.map((item, index) => {
                     return (
-                        <li
-                            key={[item.title, item.signer]}
-                            ref={listRef.current[index]}
-                        >
+                        <li key={[item.title, item.signer]}>
                             <h3>{item.title}</h3>
                             <p>{item.signer}</p>
                             <button onClick={() => onDeleteList(index)}>
