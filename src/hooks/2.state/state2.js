@@ -36,32 +36,54 @@ function State2() {
                 User: {
                     nickname: "반하나",
                 },
-                content: "오늘도 화이팅입니다!",
+                content: "오늘도 고생하셨습니다!",
                 myComment: false,
             },
             {
                 User: {
                     nickname: "오렌지",
                 },
-                content: "오늘도 화이팅입니다!",
+                content: "오늘도 좋은 하루 되세요!",
                 myComment: false,
             },
             {
                 User: {
                     nickname: "이멜론",
                 },
-                content: "오늘도 화이팅입니다!",
+                content: "오늘도 파이팅입니다!",
                 myComment: false,
             },
             {
                 User: {
                     nickname: "박수박",
                 },
-                content: "오늘도 화이팅입니다!",
+                content: "오늘도 화이팅!",
                 myComment: false,
             },
         ],
     });
+    const [setAuthor, setIsAuthor] = useState();
+    const [setComments, setIsComments] = useState();
+    const [setCommentList, setIsCommentList] = useState(post.Comments);
+
+    const inputAuthor = (e) => {
+        setIsAuthor(e.target.value);
+    };
+
+    const inputComments = (e) => {
+        setIsComments(e.target.value);
+    };
+
+    const onAddComments = () => {
+        const newObj = {
+            User: { nickname: `${setAuthor}` },
+            content: `${setComments}`,
+            myComment: false,
+        };
+        setIsCommentList([...setCommentList, newObj]);
+        setIsAuthor("");
+        setIsComments("");
+    };
 
     return (
         <S.Wrapper>
@@ -83,16 +105,22 @@ function State2() {
             </S.PostInfo>
             <div>
                 <p>
-                    댓글 수: <span>{post.Comments.length}</span>
+                    댓글 수: <span>{setCommentList.length}</span>
                 </p>
-                <input placeholder="작성자" />
-                <input placeholder="댓글 내용" />
-                <button>댓글 작성</button>
+                <input
+                    placeholder="작성자"
+                    onChange={inputAuthor}
+                    value={setAuthor}
+                />
+                <input
+                    placeholder="댓글 내용"
+                    onChange={inputComments}
+                    value={setComments}
+                />
+                <button onClick={onAddComments}>댓글 작성</button>
             </div>
             <S.CommentList>
-                {/* list */}
-                {/* 예시 데이터 */}
-                <Comment />
+                <Comment commentList={setCommentList} />
             </S.CommentList>
         </S.Wrapper>
     );

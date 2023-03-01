@@ -13,18 +13,18 @@ function State1() {
     삭제 버턴을 눌렀을 때 데이터가 삭제될 수 있도록 해주세요
     */
 
-    const a = PlayListMock.playlist.map((item) => {
-        const b = {
-            ...item,
-            id: Math.floor(Math.random() * 100000),
-        };
-        return b;
-    });
-    console.log(a);
+    // const a = PlayListMock.playlist.map((item) => {
+    //     const b = {
+    //         ...item,
+    //         id: Math.floor(Math.random() * 100000),
+    //     };
+    //     return b;
+    // });
+    // console.log(a);
 
     const [titleInput, setTitleInput] = useState();
     const [songInput, setSongInput] = useState();
-    const [inputList, setInputList] = useState(a);
+    const [inputList, setInputList] = useState(PlayListMock.playlist);
 
     console.log(PlayListMock.playlist);
 
@@ -41,7 +41,7 @@ function State1() {
         const newMusic = {
             title: titleInput,
             signer: songInput,
-            id: Math.floor(Math.random() * 100000),
+            // id: Math.floor(Math.random() * 100000),
         };
         setTitleInput("");
         setSongInput("");
@@ -50,13 +50,12 @@ function State1() {
         console.log(inputList);
     };
     console.log(inputList);
-    console.log(a[8].id);
 
     const onDeleteList = (arg) => {
         // spread : 배열의 원본, 배열에 추가할 항목(객체)
         // rest : 기준값, 기준값을 제외한 나머지 항목(객체)
         const playList = [...inputList];
-        const musicList = playList.filter((item) => item.id !== arg.id);
+        const musicList = playList.filter((item) => item.title !== arg.title);
         setInputList(musicList);
         // 배열에 각 인자가 삭제가 되는데 화면에 뿌려지는 표현이... 이상
         console.log(inputList);

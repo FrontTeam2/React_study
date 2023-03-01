@@ -1,14 +1,24 @@
 import styled from "styled-components";
 
-function Comment() {
+function Comment(props) {
+    const { commentList } = props;
+    console.log(props);
+
     return (
         <S.CommentItem>
-            <p>
-                작성자: <span>예시 이름</span>
-            </p>
-            <p>
-                댓글 내용: <span>예시 내용</span>
-            </p>
+            {commentList.map((comment) => {
+                return (
+                    <div>
+                        <p>
+                            작성자:
+                            <span>{comment.User.nickname}</span>
+                        </p>
+                        <p>
+                            댓글 내용: <span>{comment.content}</span>
+                        </p>
+                    </div>
+                );
+            })}
         </S.CommentItem>
     );
 }
