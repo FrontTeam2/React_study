@@ -62,10 +62,18 @@ function State2() {
             },
         ],
     });
+    const newPost = post.Comments.map((item) => {
+        const id_sub = {
+            ...item,
+            id: Math.floor(Math.random() * 100000),
+        };
+        return id_sub;
+    });
+
     const [setAuthor, setIsAuthor] = useState();
     const [setComments, setIsComments] = useState();
-    const [setCommentList, setIsCommentList] = useState(post.Comments);
-
+    const [setCommentList, setIsCommentList] = useState(newPost);
+    console.log(newPost);
     const inputAuthor = (e) => {
         setIsAuthor(e.target.value);
     };
@@ -78,8 +86,10 @@ function State2() {
         const newObj = {
             User: { nickname: `${setAuthor}` },
             content: `${setComments}`,
-            myComment: false,
+            myComment: true,
+            id: Math.floor(Math.random() * 100000),
         };
+        console.log(newObj);
         setIsCommentList([...setCommentList, newObj]);
         setIsAuthor("");
         setIsComments("");
@@ -120,7 +130,10 @@ function State2() {
                 <button onClick={onAddComments}>댓글 작성</button>
             </div>
             <S.CommentList>
-                <Comment commentList={setCommentList} />
+                <Comment
+                    commentList={setCommentList}
+                    setIsCommentList={setIsCommentList}
+                />
             </S.CommentList>
         </S.Wrapper>
     );

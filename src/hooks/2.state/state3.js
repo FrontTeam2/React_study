@@ -4,7 +4,7 @@ import ProductCard from "../../components/2.state/product";
 import productList from "../../__mock__/products.json";
 
 function State3() {
-  /*
+    /*
     문제 3.
     심화문제 입니다
     
@@ -40,35 +40,35 @@ function State3() {
         구매평을 추가할 수 있습니다 (수정 및 삭제는 state2에서 풀이하였으므로 구현하지 않아도 괜찮습니다)
   */
 
-  console.log(productList);
+    console.log(productList);
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const onNavigateDetailPage = () => {
-    navigate(`/state/detail/1`);
-  };
+    const onNavigateDetailPage = () => {
+        navigate(`/state/detail/1`);
+    };
 
-  return (
-    <>
-      <h1>문제3</h1>
-      <h2>상품 목록</h2>
-      <ul>
-        {/* list */}
-        {/* 예시 데이터 */}
-        <ProductCard onNavigate={onNavigateDetailPage} />
-      </ul>
-    </>
-  );
+    return (
+        <>
+            <h1>문제3</h1>
+            <h2>상품 목록</h2>
+            <ul>
+                {/* list */}
+                {/* 예시 데이터 */}
+                <ProductCard onNavigate={onNavigateDetailPage} />
+            </ul>
+        </>
+    );
 }
 export default State3;
 
 const Item = styled.li`
-  border: 1px solid #000;
-  cursor: pointer;
-  width: 300px;
-  margin: 16px auto;
+    border: 1px solid #000;
+    cursor: pointer;
+    width: 300px;
+    margin: 16px auto;
 `;
 
 const S = {
-  Item,
+    Item,
 };
