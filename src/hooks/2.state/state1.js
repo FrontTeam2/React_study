@@ -14,7 +14,6 @@ function State1() {
   */
 
     console.log(PlayListMock.playlist);
-    /* 데이터 콘솔에 찍어두었으니 확인해볼 것 */
     const titleRef = useRef(null);
     const signerRef = useRef(null);
 
@@ -32,25 +31,23 @@ function State1() {
         titleRef.current.value = '';
         signerRef.current.value = '';
     };
-    const onDeleteMusic = (e) => {
-        const li = e.target.parentElement;
-        const title = li.children[0].innerText;
-        const signer = li.children[1].innerText;
-
-        const finalPlayList = [...playList];
-        const list = finalPlayList.filter(
-            (list) => list.title !== title && list.signer !== signer
+    const onDeleteMusic = (list) => {
+        const newList = playList.filter(
+            (pl) => pl.title !== list.title && pl.signer !== list.signer
         );
-        setPlayList(list);
+        setPlayList(newList);
+        //기존에 js방식인 event객체로 불러온 것을 리액트방식으로 변경
     };
     console.log(playList);
 
-    const musicList = playList.map((list) => {
+    const musicList = playList.map((list, index) => {
         return (
             <li>
-                <h3>{list.title}</h3>
+                <h3>
+                    {index + 1}.{list.title}
+                </h3>
                 <p>{list.signer}</p>
-                <button onClick={onDeleteMusic}>삭제</button>
+                <button onClick={() => onDeleteMusic(list)}>삭제</button>
             </li>
         );
     });
