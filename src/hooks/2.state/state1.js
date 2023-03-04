@@ -16,7 +16,7 @@ function State1() {
     /* 데이터 콘솔에 찍어두었으니 확인해볼 것 */
     const [titleInput, setTitleInput] = useState("");
     const [singerInput, setSingerInput] = useState("");
-    const [addList, setAddList] = useState([...PlayListMock.playlist]);
+    const addList = [...PlayListMock.playlist];
     const [finalList, setFinalList] = useState([]);
 
     useEffect(() => {
@@ -60,12 +60,13 @@ function State1() {
         setSingerInput("");
     };
 
-    const onDeleteList = (index) => {
+    const onDeleteList = (i) => {
         // console.log(e.target.parentElement);
-        console.log(index);
-        console.log(addList.splice(index, 1));
-        console.log(addList);
-        setFinalList([...addList]);
+        // console.log(i);
+        // console.log(addList.splice(i, 1));
+        // console.log(addList);
+        const list = addList.filter((_, index) => index != i);
+        setFinalList([...list]);
     };
     console.log(finalList);
 
@@ -81,6 +82,7 @@ function State1() {
                 </li> */}
 
                 {finalList.map((item, index) => {
+                    // 컴포넌트 빼는 것이 가독성 높다.
                     return (
                         <li key={[item.title, item.signer]}>
                             <h3>{item.title}</h3>
