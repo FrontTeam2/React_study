@@ -65,7 +65,15 @@ function State2() {
     // const [inputWriter, setInputWriter] = useState();
     // const [inputComment, setInputComment] = useState();
 
-    const [commentList, setCommentList] = useState(post.Comments);
+    const newPost = post.Comments.map((item) => {
+        const addId = {
+            ...item,
+            id: Math.floor(Math.random() * 100000),
+        };
+        return addId;
+    });
+
+    const [commentList, setCommentList] = useState(newPost);
 
     const useInputs = (initialValues) => {
         const [values, setValues] = useState(initialValues);
@@ -76,21 +84,13 @@ function State2() {
                 [event.target.name]: event.target.value,
             }));
         };
-        const onReset = () => {
-            setValues('');
-        };
+        // const onReset = () => {
+        //     setValues('');
+        // };
 
-        return [values, onChange, onReset];
+        return [values, onChange];
     };
-    const [{ nickname, content }, onChange, onReset] = useInputs('');
-
-    // const [inputPassword, setInputPassword] = useState(); 비밀번호 기능 삭제
-    // const inputWriterList = (e) => {
-    //     setInputWriter(e.target.value);
-    // };
-    // const inputCommentList = (e) => {
-    //     setInputComment(e.target.value);
-    // };
+    const [{ nickname, content }, onChange] = useInputs('');
 
     const onAddComment = () => {
         const newComment = {
@@ -99,21 +99,25 @@ function State2() {
             },
             content: content,
             myComment: true,
+            id: Math.floor(Math.random() * 100000),
         };
 
         setCommentList([...commentList, newComment]);
     };
+    const onDeleteComment = (id) => {
+        const onDeleteComment = commentList.filter((item) => item.id != id);
 
-    const onDeleteComment = (myComment) => {
-        const deleteCommentList = commentList.filter(
-            (item) => item.myComment !== myComment
-        );
-        if (deleteCommentList == '') {
-            alert('삭제할 수 없습니다.');
-        } else {
-            if (window.confirm('삭제하시겠습니까?'))
-                setCommentList(deleteCommentList);
-        }
+        setCommentList(onDeleteComment);
+    };
+
+    const onUpdateComment = (id, newContent) => {
+        const newComment = commentList.map((item) => {
+            return item.id === id
+                ? { ...item, content: newContent } // id가 일치하면 수정대상이니 수정한 내용으로 업데이트
+                : item;
+        });
+        console.log(newComment);
+        setCommentList(newComment);
     };
 
     return (
@@ -152,13 +156,12 @@ function State2() {
                 <button onClick={onAddComment}>댓글 작성</button>
             </div>
             <S.CommentList>
-                {/* list */}
-                {/* 예시 데이터 */}
                 {commentList.map((commentList) => (
                     <Comment
                         commentList={commentList}
-                        setCommentList={setCommentList}
                         onDeleteComment={onDeleteComment}
+                        onUpdateComment={onUpdateComment}
+                        // newComment={newComment}
                     />
                 ))}
             </S.CommentList>
