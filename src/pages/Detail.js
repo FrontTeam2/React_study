@@ -1,19 +1,37 @@
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from 'react-router-dom';
+import styled from 'styled-components';
 function DetailPage() {
-  const params = useParams();
-  console.log(params.productNumber);
+    // const { state } = useLocation();
+    // console.log(state);
+    const params = useParams();
+    const { state } = useLocation();
 
-  return (
-    <div>
-      {/* 
-      상세 페이지는 자유롭게 꾸미시면 됩니다.
-      아직 해당 부분의 진도가 나가지 않았기 때문에 주소의 파람을 가지고 올 수 있는 방법은
-      미리 콘솔에 찍어두었습니다.
+    const {
+        Review,
+        productDetail,
+        productName,
+        productNumber,
+        productPrice,
+        productRating,
+        productReview,
+        productSize,
+    } = state;
 
-      단, 없는 번호 상품으로 접근 시 state페이지로 돌아가도록 구현해주세요
-    */}
-      {params.productNumber}
-    </div>
-  );
+    console.log(params.productNumber);
+
+    return (
+        <ItemBox>
+            <div>
+                <h1>{productName}</h1> : {productNumber}
+            </div>
+        </ItemBox>
+    );
 }
 export default DetailPage;
+
+const ItemBox = styled.div`
+    width: 800px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+`;
