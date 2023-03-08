@@ -17,21 +17,21 @@ function Comment({ newCommentList, setNewCommentList }) {
         console.log(updateRef.current[i]);
 
         if (!isEdit) {
-            setIsEdit(true);
+            setIsEdit((prev) => !prev);
             updateRef.current[i].readOnly = false;
             console.log(list);
-            setNewCommentList([...list]);
         } else {
             updateRef.current[i].readOnly = true;
-            setIsEdit(false);
+            setIsEdit((prev) => !prev);
             console.log(list);
-            setNewCommentList([...list]);
+
             setEditInput("");
         }
+        setNewCommentList([...list]);
     };
     const onCommentDelete = (i) => {
-        const list = newCommentList.filter((_, index) => i != index);
-        setNewCommentList([...list]);
+        const list = newCommentList.filter((_, index) => index != i);
+        setNewCommentList(list);
     };
     console.log(newCommentList);
 
@@ -47,7 +47,7 @@ function Comment({ newCommentList, setNewCommentList }) {
                             댓글 내용:
                             <input
                                 ref={(el) => (updateRef.current[index] = el)}
-                                defaultValue={item.content}
+                                value={item.content}
                                 onChange={onChangeEditInput}
                                 readOnly
                             ></input>
