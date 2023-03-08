@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+
 import styled from "styled-components";
 import Comment from "../../components/2.state/comment";
 
@@ -62,6 +63,7 @@ function State2() {
             },
         ],
     });
+
     const newPost = post.Comments.map((item) => {
         const id_sub = {
             ...item,
@@ -70,29 +72,38 @@ function State2() {
         return id_sub;
     });
 
-    const [setAuthor, setIsAuthor] = useState();
-    const [setComments, setIsComments] = useState();
-    const [setCommentList, setIsCommentList] = useState(newPost);
-    console.log(newPost);
-    const inputAuthor = (e) => {
-        setIsAuthor(e.target.value);
+    const [isCommentList, setIsCommentList] = useState(newPost);
+    console.log(isCommentList);
+
+    const useInput = (initialValue) => {
+        const [inputValue, setInputValue] = useState(initialValue);
+
+        const onChange = (e) => {
+            setInputValue((prev) => ({
+                ...prev,
+                [e.target.name]: e.target.value,
+            }));
+        };
+
+        const onReset = () => {
+            setInputValue("");
+        };
+
+        return [inputValue, onChange, onReset];
     };
 
-    const inputComments = (e) => {
-        setIsComments(e.target.value);
-    };
+    const [{ nickname, content }, onChange, onReset] = useInput("");
 
-    const onAddComments = () => {
-        const newObj = {
-            User: { nickname: `${setAuthor}` },
-            content: `${setComments}`,
+    const onAddComment = () => {
+        const newComment = {
+            User: { nickname },
+            content: content,
             myComment: true,
             id: Math.floor(Math.random() * 100000),
         };
-        console.log(newObj);
-        setIsCommentList([...setCommentList, newObj]);
-        setIsAuthor("");
-        setIsComments("");
+        onReset();
+        setIsCommentList([...isCommentList, newComment]);
+        console.log(isCommentList);
     };
 
     return (
@@ -115,25 +126,32 @@ function State2() {
             </S.PostInfo>
             <div>
                 <p>
-                    댓글 수: <span>{setCommentList.length}</span>
+                    댓글 수: <span>{isCommentList.length}</span>
                 </p>
                 <input
                     placeholder="작성자"
-                    onChange={inputAuthor}
-                    value={setAuthor}
+                    value={nickname || ""}
+                    name="nickname"
+                    onChange={onChange}
                 />
                 <input
                     placeholder="댓글 내용"
-                    onChange={inputComments}
-                    value={setComments}
+                    value={content || ""}
+                    name="content"
+                    onChange={onChange}
                 />
-                <button onClick={onAddComments}>댓글 작성</button>
+                <button onClick={onAddComment}>댓글 작성</button>
             </div>
             <S.CommentList>
-                <Comment
-                    commentList={setCommentList}
-                    setIsCommentList={setIsCommentList}
-                />
+                {isCommentList.map((item, index) => {
+                    return (
+                        <Comment
+                            isComment={item}
+                            isCommentList={isCommentList}
+                            setIsCommentList={setIsCommentList}
+                        />
+                    );
+                })}
             </S.CommentList>
         </S.Wrapper>
     );

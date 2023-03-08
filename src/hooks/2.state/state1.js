@@ -29,6 +29,7 @@ function State1() {
     console.log(PlayListMock.playlist);
 
     /* 데이터 콘솔에 찍어두었으니 확인해볼 것 */
+    // useInputs (커스텀 훅을 통해 처리)
 
     const titleListInput = (e) => {
         setTitleInput(e.target.value);
@@ -51,15 +52,13 @@ function State1() {
     };
     console.log(inputList);
 
-    const onDeleteList = (arg) => {
+    const onDeleteList = (i) => {
         // spread : 배열의 원본, 배열에 추가할 항목(객체)
         // rest : 기준값, 기준값을 제외한 나머지 항목(객체)
         const playList = [...inputList];
-        const musicList = playList.filter((item) => item.title !== arg.title);
+        const musicList = playList.filter((item, index) => index !== i);
         setInputList(musicList);
         // 배열에 각 인자가 삭제가 되는데 화면에 뿌려지는 표현이... 이상
-        console.log(inputList);
-        console.log(musicList);
     };
 
     return (
@@ -68,12 +67,13 @@ function State1() {
             <ul>
                 {inputList.map((arg, index) => {
                     return (
-                        <li key={[arg.title, arg.signer]}>
+                        // key값 질문
+                        <li key={[index]}>
                             <h3>
                                 {index + 1}. {arg.title}
                             </h3>
                             <p>{arg.signer}</p>
-                            <button onClick={() => onDeleteList(arg)}>
+                            <button onClick={() => onDeleteList(index)}>
                                 삭제
                             </button>
                         </li>
