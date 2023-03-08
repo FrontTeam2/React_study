@@ -1,14 +1,31 @@
 import styled from "styled-components";
+import DetailPage from "../../pages/Detail";
 
-function ProductCard({ onNavigate }) {
+function ProductCard({ onNavigate, products }) {
+    const {
+        Review,
+        productDetail,
+        productName,
+        productNumber,
+        productPrice,
+        productRating,
+        productReview,
+        productSize,
+    } = products;
+
     return (
         <S.Item onClick={onNavigate}>
-            <h4>구멍난 양말</h4>
-            <p>상품번호: 302012</p>
-            <p>가격: 3000원</p>
-            <p>사이즈: X, M, L</p>
-            <p>평점: 4.5</p>
-            <p>리뷰: 14</p>
+            <h4>{productName}</h4>
+            <p>상품번호: {productNumber}</p>
+            <p>
+                {/* 가격의 {" "}은 띄어쓰기 용도 */}
+                가격:{" "}
+                {productPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                원
+            </p>
+            <p>사이즈: {productSize}</p>
+            <p>평점: {productRating}</p>
+            <p>리뷰: {productReview}</p>
         </S.Item>
     );
 }

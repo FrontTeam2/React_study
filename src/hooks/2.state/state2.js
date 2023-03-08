@@ -146,6 +146,7 @@ function State2() {
                 {isCommentList.map((item, index) => {
                     return (
                         <Comment
+                            key={[index]}
                             isComment={item}
                             isCommentList={isCommentList}
                             setIsCommentList={setIsCommentList}

@@ -40,6 +40,7 @@ function Comment(props) {
                         <input
                             type="text"
                             value={content}
+                            readOnly
                             placeholder="댓글을 입력하세요"
                         />
                     )}
