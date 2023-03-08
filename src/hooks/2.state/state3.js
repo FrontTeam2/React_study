@@ -52,14 +52,14 @@ function State3() {
     console.log(newProductList);
     const navigate = useNavigate();
 
-    const onNavigateDetailPage = () => {
+    const onNavigateDetailPage = (productNumber) => {
         console.log(products);
-        navigate(`/state/detail/${products.productNumber}`, {
+        navigate(`/state/detail/${productNumber}`, {
             state: products,
             // state : useNavigate의 객체 속성
             // state 키에 담겨있는 값 : 이동하는 경로로 넘겨줄 인자
         });
-        console.log(products[0].productNumber);
+        console.log(productNumber);
     };
 
     return (
@@ -72,7 +72,9 @@ function State3() {
                         return (
                             <ProductCard
                                 key={[index]}
-                                onNavigate={onNavigateDetailPage}
+                                onNavigate={() =>
+                                    onNavigateDetailPage(item.productNumber)
+                                }
                                 products={item}
                             />
                         );
