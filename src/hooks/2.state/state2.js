@@ -106,20 +106,20 @@ function State2() {
     };
     const onDeleteComment = (id) => {
         const onDeleteComment = commentList.filter((item) => item.id != id);
-
-        setCommentList(onDeleteComment);
+        console.log(onDeleteComment);
+        if (window.confirm('삭제하시겠습니까?'))
+            setCommentList(onDeleteComment);
     };
 
-    const onUpdateComment = (id, newContent) => {
+    const onUpdateComment = (id, editContent) => {
         const newComment = commentList.map((item) => {
             return item.id === id
-                ? { ...item, content: newContent } // id가 일치하면 수정대상이니 수정한 내용으로 업데이트
+                ? { ...item, content: editContent } // id가 일치하면 수정대상이니 수정한 내용으로 업데이트
                 : item;
         });
-        console.log(newComment);
+
         setCommentList(newComment);
     };
-
     return (
         <S.Wrapper>
             <h1>문제2</h1>
