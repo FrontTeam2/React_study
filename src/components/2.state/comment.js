@@ -1,70 +1,47 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import useInput from "../../hooks/useInput";
 
-function Comment({ newCommentList, setNewCommentList }) {
-    const updateRef = useRef([]);
-    const [isEdit, setIsEdit] = useState(false);
-    const [editInput, setEditInput] = useState("");
+function Comment({ newCommentList, commentDelete, commentEdit }) {
+    const { User, content, myComment, id } = newCommentList;
 
-    const onChangeEditInput = (e) => {
-        setEditInput(e.target.value);
+    const [isEditBtn, setIsEditBtn] = useState(false);
+
+    const [editComment, onChange] = useInput(content);
+
+    const onEditBtn = () => {
+        setIsEditBtn((prev) => !prev);
     };
-    const onCommentUpdate = (i) => {
-        let list = [...newCommentList];
-        console.log(list);
-        list[i] = { ...list[i], content: editInput };
-        console.log(list);
-        console.log(updateRef.current[i]);
 
-        if (!isEdit) {
-            setIsEdit((prev) => !prev);
-            updateRef.current[i].readOnly = false;
-            console.log(list);
-        } else {
-            updateRef.current[i].readOnly = true;
-            setIsEdit((prev) => !prev);
-            console.log(list);
-
-            setEditInput("");
-        }
-        setNewCommentList([...list]);
+    const onEdit = () => {
+        commentEdit(id, editComment);
+        setIsEditBtn(false);
     };
-    const onCommentDelete = (i) => {
-        const list = newCommentList.filter((_, index) => index != i);
-        setNewCommentList(list);
-    };
-    console.log(newCommentList);
 
     return (
         <>
-            {newCommentList.map((item, index) => {
-                return (
-                    <S.CommentItem>
-                        <p>
-                            작성자: <span>{item.User.nickname}</span>
-                        </p>
-                        <p>
-                            댓글 내용:
-                            <input
-                                ref={(el) => (updateRef.current[index] = el)}
-                                value={item.content}
-                                onChange={onChangeEditInput}
-                                readOnly
-                            ></input>
-                        </p>
-                        {item.myComment && (
-                            <>
-                                <button onClick={() => onCommentUpdate(index)}>
-                                    수정
-                                </button>
-                                <button onClick={() => onCommentDelete(index)}>
-                                    삭제
-                                </button>
-                            </>
+            <S.CommentItem>
+                <p>
+                    작성자: <span>{User.nickname}</span>
+                </p>
+                <p>
+                    댓글 내용:
+                    <input
+                        value={editComment}
+                        onChange={onChange}
+                        readOnly={!isEditBtn ? true : false}
+                    ></input>
+                </p>
+                {myComment && (
+                    <>
+                        {!isEditBtn && (
+                            <button onClick={onEditBtn}>수정</button>
                         )}
-                    </S.CommentItem>
-                );
-            })}
+                        {isEditBtn && <button onClick={onEdit}>완료</button>}
+                        <button onClick={() => commentDelete(id)}>삭제</button>
+                    </>
+                )}
+            </S.CommentItem>
         </>
     );
 }

@@ -52,9 +52,10 @@ function State3() {
 
     const navigate = useNavigate();
 
-    const onNavigateDetailPage = (product) => {
-        console.log(product);
-        navigate(`/state/detail/${product.productNumber}`);
+    const onNavigateDetailPage = (productNumber) => {
+        console.log(productNumber);
+        navigate(`/state/detail/${productNumber}`);
+        // productNumber로만
         // state : useNavigate의 속성값. 인자를 넘겨줄 수 있다. 전달받은 state는 useLocation으로 관리
     };
 
@@ -67,7 +68,10 @@ function State3() {
                     productLists.map((item) => {
                         return (
                             <ProductCard
-                                onNavigate={onNavigateDetailPage}
+                            key={item.productNumber}
+                                onNavigate={() =>
+                                    onNavigateDetailPage(item.productNumber)
+                                }
                                 product={item}
                             />
                         );

@@ -12,14 +12,10 @@ function ProductCard({ onNavigate, product }) {
         productDetail,
     } = product;
     return (
-        <S.Item onClick={() => onNavigate(product)}>
+        <S.Item onClick={onNavigate}>
             <h4>{productName}</h4>
             <p>상품번호: {productNumber}</p>
-            <p>
-                가격:{" "}
-                {productPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                원
-            </p>
+            <p>가격: {Number(productPrice).toLocaleString()}원</p>
             <p>사이즈: {productSize}</p>
             <p>평점: {productRating}</p>
             <p>리뷰: {productReview}</p>

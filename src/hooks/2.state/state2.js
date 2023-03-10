@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Comment from "../../components/2.state/comment";
+import useInputs from "../useInputs";
 
 function State2() {
     /*  
@@ -31,6 +32,7 @@ function State2() {
                 },
                 content: "오늘도 화이팅입니다!",
                 myComment: false,
+                id: 1,
             },
             {
                 User: {
@@ -38,6 +40,7 @@ function State2() {
                 },
                 content: "오늘도 화이팅입니다!",
                 myComment: false,
+                id: 2,
             },
             {
                 User: {
@@ -45,6 +48,7 @@ function State2() {
                 },
                 content: "오늘도 화이팅입니다!",
                 myComment: false,
+                id: 3,
             },
             {
                 User: {
@@ -52,6 +56,7 @@ function State2() {
                 },
                 content: "오늘도 화이팅입니다!",
                 myComment: false,
+                id: 4,
             },
             {
                 User: {
@@ -59,33 +64,46 @@ function State2() {
                 },
                 content: "오늘도 화이팅입니다!",
                 myComment: false,
+                id: 5,
             },
         ],
     });
-    const [authorInput, setAuthorInput] = useState();
-    const [commentContentInput, setCommentContentInput] = useState();
-    const [newCommentList, setNewCommentList] = useState([...post.Comments]);
 
-    const onAuthorChange = (e) => {
-        setAuthorInput(e.target.value);
-    };
-    const onCommentContentChange = (e) => {
-        setCommentContentInput(e.target.value);
-    };
+    const [{ author, comment }, onChange] = useInputs("");
 
     const onCommentWrite = () => {
         const newComment = {
             User: {
-                nickname: authorInput,
+                nickname: author,
             },
-            content: commentContentInput,
+            content: comment,
             myComment: true,
+            id: Math.floor(Math.random() * 100000),
         };
-        setNewCommentList([...newCommentList, newComment]);
-        setAuthorInput("");
-        setCommentContentInput("");
+        setPost((prev) => ({
+            ...prev,
+            Comments: [...prev.Comments, newComment],
+        }));
     };
-    console.log(newCommentList);
+
+    const commentEdit = (id, editComment) => {
+        const newComment = post.Comments.map((item) => {
+            return item.id === id ? { ...item, content: editComment } : item;
+        });
+        setPost((prev) => ({
+            ...prev,
+            Comments: newComment,
+        }));
+    };
+
+    const commentDelete = (id) => {
+        const deleteComment = post.Comments.filter((item) => item.id !== id);
+        console.log(deleteComment);
+        setPost((prev) => ({
+            ...prev,
+            Comments: deleteComment,
+        }));
+    };
 
     return (
         <S.Wrapper>
@@ -107,27 +125,27 @@ function State2() {
             </S.PostInfo>
             <div>
                 <p>
-                    댓글 수: <span>{newCommentList.length}</span>
+                    댓글 수: <span>{post.Comments.length}</span>
                 </p>
-                <input
-                    placeholder="작성자"
-                    onChange={onAuthorChange}
-                    value={authorInput}
-                />
+                <input placeholder="작성자" onChange={onChange} name="author" />
                 <input
                     placeholder="댓글 내용"
-                    onChange={onCommentContentChange}
-                    value={commentContentInput}
+                    onChange={onChange}
+                    name="comment"
                 />
                 <button onClick={onCommentWrite}>댓글 작성</button>
             </div>
             <S.CommentList>
-                {/* list */}
-                {/* 예시 데이터 */}
-                <Comment
-                    newCommentList={newCommentList}
-                    setNewCommentList={setNewCommentList}
-                />
+                {post.Comments.map((item) => {
+                    return (
+                        <Comment
+                            newCommentList={item}
+                            key={item.id}
+                            commentDelete={commentDelete}
+                            commentEdit={commentEdit}
+                        />
+                    );
+                })}
             </S.CommentList>
         </S.Wrapper>
     );
