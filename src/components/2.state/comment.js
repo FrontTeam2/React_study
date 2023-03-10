@@ -1,32 +1,24 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import useInput from '../../hooks/useInput';
 
 function Comment(props) {
     const { commentList, onDeleteComment, onUpdateComment } = props;
-
     const { User, content, myComment, id } = commentList;
-
     const [isEdit, setIsEdit] = useState(false);
-    console.log(commentList);
-    const useInput = (initialValue) => {
-        const [value, setValue] = useState(initialValue);
-
-        const onChange = (e) => {
-            setValue(e.target.value);
-        };
-
-        return [value, onChange];
-    };
-    console.log(content);
     const [editComment, onChange] = useInput(content);
 
-    console.log(editComment);
     const onClickIsEdit = () => {
         setIsEdit((prev) => !prev);
 
         if (isEdit) {
             setIsEdit(false);
         }
+    };
+
+    const onClickModify = () => {
+        onUpdateComment(id, editComment);
+        setIsEdit(false);
     };
     return (
         <S.CommentItem>
@@ -36,11 +28,7 @@ function Comment(props) {
             <p>
                 댓글 내용:
                 {isEdit ? (
-                    <CommentInput
-                        name="newComment"
-                        onChange={onChange}
-                        value={editComment}
-                    />
+                    <CommentInput onChange={onChange} value={editComment} />
                 ) : (
                     content
                 )}
@@ -48,7 +36,7 @@ function Comment(props) {
             {myComment && !isEdit && (
                 <button onClick={onClickIsEdit}>수정</button>
             )}
-            {isEdit && <button onClick={onClickIsEdit}>수정하기</button>}
+            {isEdit && <button onClick={onClickModify}>수정하기</button>}
             {isEdit && <button onClick={onClickIsEdit}>수정취소</button>}
             {myComment && (
                 <button onClick={() => onDeleteComment(id)}>삭제</button>

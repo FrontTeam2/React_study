@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import Comment from '../../components/2.state/comment';
+import useInputs from '../useInputs';
 
 function State2() {
     /*  
@@ -31,6 +32,7 @@ function State2() {
                 },
                 content: '오늘도 화이팅입니다!',
                 myComment: false,
+                id: 421312,
             },
             {
                 User: {
@@ -38,6 +40,7 @@ function State2() {
                 },
                 content: '오늘도 화이팅입니다!',
                 myComment: false,
+                id: 421212,
             },
             {
                 User: {
@@ -45,6 +48,7 @@ function State2() {
                 },
                 content: '오늘도 화이팅입니다!',
                 myComment: false,
+                id: 521423,
             },
             {
                 User: {
@@ -52,6 +56,7 @@ function State2() {
                 },
                 content: '오늘도 화이팅입니다!',
                 myComment: false,
+                id: 999999,
             },
             {
                 User: {
@@ -59,37 +64,11 @@ function State2() {
                 },
                 content: '오늘도 화이팅입니다!',
                 myComment: false,
+                id: 888888,
             },
         ],
     });
-    // const [inputWriter, setInputWriter] = useState();
-    // const [inputComment, setInputComment] = useState();
 
-    const newPost = post.Comments.map((item) => {
-        const addId = {
-            ...item,
-            id: Math.floor(Math.random() * 100000),
-        };
-        return addId;
-    });
-
-    const [commentList, setCommentList] = useState(newPost);
-
-    const useInputs = (initialValues) => {
-        const [values, setValues] = useState(initialValues);
-
-        const onChange = (event) => {
-            setValues((prev) => ({
-                ...prev,
-                [event.target.name]: event.target.value,
-            }));
-        };
-        // const onReset = () => {
-        //     setValues('');
-        // };
-
-        return [values, onChange];
-    };
     const [{ nickname, content }, onChange] = useInputs('');
 
     const onAddComment = () => {
@@ -102,23 +81,32 @@ function State2() {
             id: Math.floor(Math.random() * 100000),
         };
 
-        setCommentList([...commentList, newComment]);
+        setPost((prev) => ({
+            ...prev,
+            Comments: [...prev.Comments, newComment],
+        }));
     };
     const onDeleteComment = (id) => {
-        const onDeleteComment = commentList.filter((item) => item.id != id);
-        console.log(onDeleteComment);
+        const deleteComment = post.Comments.filter((item) => item.id !== id);
+
         if (window.confirm('삭제하시겠습니까?'))
-            setCommentList(onDeleteComment);
+            setPost((prev) => ({
+                ...prev,
+                Comments: deleteComment,
+            }));
     };
 
     const onUpdateComment = (id, editContent) => {
-        const newComment = commentList.map((item) => {
+        const newComment = post.Comments.map((item) => {
             return item.id === id
                 ? { ...item, content: editContent } // id가 일치하면 수정대상이니 수정한 내용으로 업데이트
                 : item;
         });
 
-        setCommentList(newComment);
+        setPost((prev) => ({
+            ...prev,
+            Comments: newComment,
+        }));
     };
     return (
         <S.Wrapper>
@@ -140,7 +128,7 @@ function State2() {
             </S.PostInfo>
             <div>
                 <p>
-                    댓글 수: <span>{commentList.length}</span>
+                    댓글 수: <span>{post.Comments.length}</span>
                 </p>
                 <input
                     placeholder="작성자"
@@ -156,12 +144,12 @@ function State2() {
                 <button onClick={onAddComment}>댓글 작성</button>
             </div>
             <S.CommentList>
-                {commentList.map((commentList) => (
+                {post.Comments.map((commentList) => (
                     <Comment
+                        key={commentList.id}
                         commentList={commentList}
                         onDeleteComment={onDeleteComment}
                         onUpdateComment={onUpdateComment}
-                        // newComment={newComment}
                     />
                 ))}
             </S.CommentList>

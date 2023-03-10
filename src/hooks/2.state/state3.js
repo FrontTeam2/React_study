@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import ProductCard from '../../components/2.state/product';
@@ -41,26 +41,13 @@ function State3() {
         구매평을 추가할 수 있습니다 (수정 및 삭제는 state2에서 풀이하였으므로 구현하지 않아도 괜찮습니다)
   */
 
-    console.log(productList);
-
-    const [productLists, setProductLists] = useState();
     const { products } = productList;
-
-    useEffect(() => {
-        if (productList) {
-            setProductLists(products);
-        } else {
-            <div>내용물이 없어요</div>;
-        }
-    }, []);
+    const [productLists, setProductLists] = useState(products);
 
     const navigate = useNavigate();
 
-    const onNavigateDetailPage = (products) => {
-        console.log(products);
-        navigate(`/state/detail/${products.productNumber}`, {
-            state: products,
-        });
+    const onNavigateDetailPage = (productNumber) => {
+        navigate(`/state/detail/${productNumber}`);
     };
 
     return (
@@ -68,15 +55,15 @@ function State3() {
             <h1>문제3</h1>
             <h2>상품 목록</h2>
             <ul>
-                {productLists &&
-                    productLists.map((item) => {
-                        return (
-                            <ProductCard
-                                onNavigate={onNavigateDetailPage}
-                                products={item}
-                            />
-                        );
-                    })}
+                {productLists.map((item) => {
+                    return (
+                        <ProductCard
+                            key={item.productNumber}
+                            onNavigate={onNavigateDetailPage}
+                            products={item}
+                        />
+                    );
+                })}
             </ul>
         </>
     );

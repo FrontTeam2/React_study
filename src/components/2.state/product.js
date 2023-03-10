@@ -1,9 +1,6 @@
 import styled from 'styled-components';
-import DetailPage from '../../pages/Detail';
 function ProductCard({ onNavigate, products }) {
     const {
-        Review,
-        productDetail,
         productName,
         productNumber,
         productPrice,
@@ -13,7 +10,7 @@ function ProductCard({ onNavigate, products }) {
     } = products;
     return (
         <>
-            <S.Item onClick={() => onNavigate(products)}>
+            <S.Item onClick={() => onNavigate(productNumber)}>
                 <h4>{productName}</h4>
                 <p>상품번호: {productNumber}</p>
                 <p>

@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react';
 import PlayListMock from '../../__mock__/playList.json';
-import List from './Music/List';
 
 function State1() {
     /* 
@@ -13,17 +12,17 @@ function State1() {
     삭제 버턴을 눌렀을 때 데이터가 삭제될 수 있도록 해주세요
   */
 
-    console.log(PlayListMock.playlist);
     const titleRef = useRef(null);
     const signerRef = useRef(null);
 
     const { playlist } = PlayListMock;
     const [playList, setPlayList] = useState(playlist);
-    console.log(playList);
+
     const onAddList = () => {
         const newMusic = {
             title: titleRef.current.value,
             signer: signerRef.current.value,
+            id: Math.floor(Math.random() * 100000),
         };
 
         setPlayList([...playList, newMusic]);
@@ -32,17 +31,14 @@ function State1() {
         signerRef.current.value = '';
     };
     const onDeleteMusic = (list) => {
-        const newList = playList.filter(
-            (pl) => pl.title !== list.title && pl.signer !== list.signer
-        );
+        const newList = playList.filter((pl) => pl.id !== list.id);
         setPlayList(newList);
         //기존에 js방식인 event객체로 불러온 것을 리액트방식으로 변경
     };
-    console.log(playList);
 
     const musicList = playList.map((list, index) => {
         return (
-            <li>
+            <li key={list.id}>
                 <h3>
                     {index + 1}.{list.title}
                 </h3>
