@@ -48,7 +48,7 @@ function State3() {
 
     useEffect(() => {
         setProductLists(products);
-    });
+    }, []);
 
     const navigate = useNavigate();
 
@@ -68,7 +68,7 @@ function State3() {
                     productLists.map((item) => {
                         return (
                             <ProductCard
-                            key={item.productNumber}
+                                key={item.productNumber}
                                 onNavigate={() =>
                                     onNavigateDetailPage(item.productNumber)
                                 }
