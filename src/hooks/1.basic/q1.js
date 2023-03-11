@@ -40,7 +40,7 @@ function Q1() {
 
     // const handleCheck = (e) => {
     //     if (input) {
-    //         e.target.innerText = '올바르게 입력하였습니다';
+    //         e.target.innerText = '올바르게 입력하였습니다' 흐...;
     //     } else if (!input) {
     //         e.target.innerText = '올바르지 않습니다.';
     //     }
